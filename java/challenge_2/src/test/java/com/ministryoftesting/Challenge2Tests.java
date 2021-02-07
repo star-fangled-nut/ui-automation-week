@@ -156,10 +156,6 @@ public class Challenge2Tests {
     }
 
     private Boolean checkCount(List<WebElement> elements) {
-        if(elements.size() >= 1){
-            return true;
-        }
-
-        return false;
+        return elements.size() >= 1;
     }
 }
