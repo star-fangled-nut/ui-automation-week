@@ -1,6 +1,8 @@
 package com.ministryoftesting;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,12 +25,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Challenge2Tests {
 
+    WebDriver driver;
+
+    @Before
+    public void createBrowserInstance() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+    }
+    @After
+    public void closeBrowser() {
+        driver.quit();
+    }
 //  Test one: Check to see if you can log in with valid credentials
+
     @Test
     public void loginTest() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-
         driver.navigate().to("https://automationintesting.online/#/");
         driver.findElement(By.cssSelector("footer p a:nth-child(5)")).click();
     Thread.sleep(1000);
@@ -47,13 +58,10 @@ public class Challenge2Tests {
 
         assertThat(true, is(title));
     }
-
 //  Test two: Check to see if rooms are saved and displayed in the UI
+
     @Test
     public void room() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-
         driver.navigate().to("https://automationintesting.online/#/");
         driver.findElement(By.xpath("//a[@href=\"/#/admin\"]")).click();
 
@@ -76,13 +84,10 @@ public class Challenge2Tests {
 
         assertThat(driver.findElements(By.className(".detail")).size(), not(1));
     }
-
 //  Test three: Check to see the confirm message appears when branding is updated
+
     @Test
     public void updateBrandin() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-
         driver.get("https://automationintesting.online/#/admin");
 
         driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
@@ -108,15 +113,10 @@ public class Challenge2Tests {
             assertThat(true, is(Boolean.FALSE));
         }
     }
-
-    WebDriver driver;
-
 //  Test four: Check to see if the contact form shows a success message
+
     @Test
     public void ContectCheck() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-
         driver.navigate().to("https://automationintesting.online");
 
         driver.findElement(By.cssSelector("input[placeholder=\"Name\"]")).sendKeys("TEST123");
@@ -131,13 +131,10 @@ public class Challenge2Tests {
         Thread.sleep(4000);
         assertThat(driver.findElement(By.cssSelector(".contact")).getText().contains("Thanks for getting in touch"), is(true));
 }
-
 //  Test five: Check to see if unread messages are bolded
+
     @Test
     public void isTheMessageBoldWhenUnreadInTheMEssageViwe() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-
         driver.navigate().to("https://automationintesting.online/#/admin/messages");
 
         driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
@@ -147,10 +144,6 @@ public class Challenge2Tests {
         driver.findElement(By.className("float-right")).click();
 
         Thread.sleep(3000);
-
-
-
-
 
         assertThat(checkCount(driver.findElements(By.cssSelector(".read-false"))), is(true));
     }
