@@ -77,7 +77,7 @@ public class Challenge2Tests {
 
     //  Test three: Check to see the confirm message appears when branding is updated
     @Test
-    public void updateBrandin() {
+    public void updateBranding() {
         driver.get("https://automationintesting.online/#/admin");
 
         driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
@@ -100,7 +100,7 @@ public class Challenge2Tests {
 
     //  Test four: Check to see if the contact form shows a success message
     @Test
-    public void ContectCheck() {
+    public void contactCheck() {
         driver.navigate().to("https://automationintesting.online");
 
         driver.findElement(By.cssSelector("input[placeholder=\"Name\"]")).sendKeys("TEST123");
@@ -119,7 +119,7 @@ public class Challenge2Tests {
 
     //  Test five: Check to see if unread messages are bolded
     @Test
-    public void isTheMessageBoldWhenUnreadInTheMEssageViwe() {
+    public void isTheMessageBoldWhenUnreadInTheMessageView() {
         driver.navigate().to("https://automationintesting.online/#/admin/messages");
 
         driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
