@@ -26,6 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Challenge2Tests {
 
+    public static final String ADMIN_USERNAME = "admin";
+    public static final String ADMIN_PASSWORD = "password";
     WebDriver driver;
 
     @Before
@@ -45,8 +47,7 @@ public class Challenge2Tests {
     public void loginTest() {
         driver.navigate().to("https://automationintesting.online/#/admin");
 
-        LoginPanel loginPanel = new LoginPanel(driver);
-        loginPanel.login("admin", "password");
+        loginAsAdmin();
 
         AdminNavBar adminNavBar = new AdminNavBar(driver);
 
@@ -59,8 +60,7 @@ public class Challenge2Tests {
     public void room() {
         driver.navigate().to("https://automationintesting.online/#/admin");
 
-        LoginPanel loginPanel = new LoginPanel(driver);
-        loginPanel.login("admin", "password");
+        loginAsAdmin();
 
         AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
         addRoomPanel.addRoom("101", "101");
@@ -73,8 +73,7 @@ public class Challenge2Tests {
     public void updateBranding() {
         driver.get("https://automationintesting.online/#/admin");
 
-        LoginPanel loginPanel = new LoginPanel(driver);
-        loginPanel.login("admin", "password");
+        loginAsAdmin();
 
         driver.get("https://automationintesting.online/#/admin/branding");
 
@@ -107,11 +106,14 @@ public class Challenge2Tests {
     public void isTheMessageBoldWhenUnreadInTheMessageView() {
         driver.navigate().to("https://automationintesting.online/#/admin/messages");
 
-        LoginPanel loginPanel = new LoginPanel(driver);
-        loginPanel.login("admin", "password");
+        loginAsAdmin();
 
         MessagePanel messagePanel = new MessagePanel(driver);
-
         assertThat("Unread messages are displayed", messagePanel.unreadMessagesExist(), is(true));
+    }
+
+    private void loginAsAdmin() {
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 }
