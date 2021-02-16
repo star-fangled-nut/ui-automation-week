@@ -18,6 +18,8 @@ public class AdminNavBar {
     }
 
     public List<String> getNavigationLinkText() {
-        return driver.findElements(navigationLink).stream().map(WebElement::getText).collect(Collectors.toList());
+        return driver.findElements(navigationLink).stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 }

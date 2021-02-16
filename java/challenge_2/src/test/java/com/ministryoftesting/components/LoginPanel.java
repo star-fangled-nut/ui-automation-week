@@ -20,5 +20,4 @@ public class LoginPanel {
         driver.findElement(passwordField).sendKeys(password);
         driver.findElement(submitButton).click();
     }
-
 }

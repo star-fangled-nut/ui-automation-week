@@ -81,7 +81,10 @@ public class Challenge2Tests {
         BrandingPanel brandingPanel = new BrandingPanel(driver);
         brandingPanel.setName("Test");
 
-        assertThat("Branding updated modal is displayed", brandingPanel.isCloseModalButtonDisplayed(), is(true));
+        assertThat(
+                "Branding updated modal is displayed",
+                brandingPanel.isCloseModalButtonDisplayed(),
+                is(true));
     }
 
     //  Test four: Check to see if the contact form shows a success message
@@ -94,7 +97,9 @@ public class Challenge2Tests {
         contactPanel.enterMessageDetails("TEsTEST", "TEsTESTTEsTESTTEsTEST");
         contactPanel.submitMessage();
 
-        Awaitility.await().atMost(Duration.ofSeconds(10)).until(contactPanel::messageIsSubmittedSuccessfully);
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(10))
+                .until(contactPanel::messageIsSubmittedSuccessfully);
     }
 
     //  Test five: Check to see if unread messages are bolded
