@@ -1,17 +1,15 @@
 package com.ministryoftesting;
 
+import com.ministryoftesting.components.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.awaitility.Awaitility;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -45,34 +43,29 @@ public class Challenge2Tests {
     //  Test one: Check to see if you can log in with valid credentials
     @Test
     public void loginTest() {
-        driver.navigate().to("https://automationintesting.online/#/");
-        driver.findElement(By.cssSelector("footer p a:nth-child(5)")).click();
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        driver.findElement(By.className("float-right")).click();
+        driver.navigate().to("https://automationintesting.online/#/admin");
 
-        List<WebElement> navigationLinks = driver.findElements(By.className("nav-item"));
-        System.out.println(navigationLinks.get(0).getText());
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login("admin", "password");
 
-        assertThat(navigationLinks.get(0).getText(), is("Rooms"));
+        AdminNavBar adminNavBar = new AdminNavBar(driver);
+
+        System.out.println(adminNavBar.getNavigationLinkText().get(0));
+        assertThat(adminNavBar.getNavigationLinkText().get(0), is("Rooms"));
     }
 
     //  Test two: Check to see if rooms are saved and displayed in the UI
     @Test
     public void room() {
-        driver.navigate().to("https://automationintesting.online/#/");
-        driver.findElement(By.xpath("//a[@href=\"/#/admin\"]")).click();
+        driver.navigate().to("https://automationintesting.online/#/admin");
 
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login("admin", "password");
 
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        driver.findElement(By.className("float-right")).click();
+        AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
+        addRoomPanel.addRoom("101", "101");
 
-        driver.findElement(By.cssSelector(".room-form > div:nth-child(1) input")).sendKeys("101");
-        driver.findElement(By.cssSelector(".room-form > div:nth-child(4) input")).sendKeys("101");
-        driver.findElement(By.className("btn-outline-primary")).click();
-
-        assertThat(driver.findElements(By.className(".detail")).size(), not(1));
+        assertThat(addRoomPanel.getSavedRoomCount(), not(1));
     }
 
     //  Test three: Check to see the confirm message appears when branding is updated
@@ -80,22 +73,15 @@ public class Challenge2Tests {
     public void updateBranding() {
         driver.get("https://automationintesting.online/#/admin");
 
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        driver.findElement(By.className("float-right")).click();
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login("admin", "password");
 
         driver.get("https://automationintesting.online/#/admin/branding");
 
-        driver.findElement(By.id("name")).sendKeys("Test");
-        driver.findElement(By.className("btn-outline-primary")).click();
+        BrandingPanel brandingPanel = new BrandingPanel(driver);
+        brandingPanel.setName("Test");
 
-        int count = driver.findElements(By.xpath("//button[text()=\"Close\"]")).size();
-
-        if(count == 1){
-            assertThat(true, is(true));
-        } else {
-            assertThat(true, is(Boolean.FALSE));
-        }
+        assertThat("Branding updated modal is displayed", brandingPanel.isCloseModalButtonDisplayed(), is(true));
     }
 
     //  Test four: Check to see if the contact form shows a success message
@@ -103,18 +89,12 @@ public class Challenge2Tests {
     public void contactCheck() {
         driver.navigate().to("https://automationintesting.online");
 
-        driver.findElement(By.cssSelector("input[placeholder=\"Name\"]")).sendKeys("TEST123");
-        driver.findElement(By.cssSelector("input[placeholder=\"Email\"]")).sendKeys("TEST123@TEST.COM");
-        driver.findElement(By.cssSelector("input[placeholder=\"Phone\"]")).sendKeys("01212121311");
-        driver.findElement(By.cssSelector("input[placeholder=\"Subject\"]")).sendKeys("TEsTEST");
-        driver.findElement(By.cssSelector("textarea")).sendKeys("TEsTESTTEsTESTTEsTEST");
-        driver.findElement(By.xpath("//button[text()=\"Submit\"]")).click();
+        ContactPanel contactPanel = new ContactPanel(driver);
+        contactPanel.enterContactDetails("TEST123", "TEST123@TEST.COM", "01212121311");
+        contactPanel.enterMessageDetails("TEsTEST", "TEsTESTTEsTESTTEsTEST");
+        contactPanel.submitMessage();
 
-        Awaitility.await().atMost(Duration.ofSeconds(10)).until(this::submitButtonIsNoLongerDisplayed);
-}
-
-    public boolean submitButtonIsNoLongerDisplayed() {
-        return (driver.findElement(By.className("col-sm-5")).getText().contains("Thanks for getting in touch"));
+        Awaitility.await().atMost(Duration.ofSeconds(10)).until(contactPanel::messageIsSubmittedSuccessfully);
     }
 
     //  Test five: Check to see if unread messages are bolded
@@ -122,14 +102,11 @@ public class Challenge2Tests {
     public void isTheMessageBoldWhenUnreadInTheMessageView() {
         driver.navigate().to("https://automationintesting.online/#/admin/messages");
 
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        driver.findElement(By.className("float-right")).click();
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login("admin", "password");
 
-        assertThat(checkCount(driver.findElements(By.cssSelector(".read-false"))), is(true));
-    }
+        MessagePanel messagePanel = new MessagePanel(driver);
 
-    private Boolean checkCount(List<WebElement> elements) {
-        return elements.size() >= 1;
+        assertThat("Unread messages are displayed", messagePanel.unreadMessagesExist(), is(true));
     }
 }
