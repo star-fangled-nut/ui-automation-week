@@ -38,6 +38,6 @@ public class ContactPanel {
     }
 
     public boolean messageIsSubmittedSuccessfully() {
-        return (driver.findElement(contactPanel).getText().contains("Thanks for getting in touch"));
+        return driver.findElement(contactPanel).getText().contains("Thanks for getting in touch");
     }
 }

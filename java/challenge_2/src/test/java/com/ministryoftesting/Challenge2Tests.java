@@ -13,8 +13,8 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 //    Welcome to UI Automation Challenge 2
 //
@@ -62,9 +62,14 @@ public class Challenge2Tests {
         loginAsAdmin();
 
         AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
+
+        int initialRoomCount = addRoomPanel.getSavedRoomCount();
         addRoomPanel.addRoom("101", "101");
 
-        assertThat(addRoomPanel.getSavedRoomCount(), not(1));
+        assertThat(
+                "The number of rooms displayed has incremented",
+                addRoomPanel.getSavedRoomCount(),
+                greaterThan(initialRoomCount));
     }
     //  Test three: Check to see the confirm message appears when branding is updated
 
