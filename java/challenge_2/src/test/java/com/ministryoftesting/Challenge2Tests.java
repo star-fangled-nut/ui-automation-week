@@ -28,7 +28,8 @@ public class Challenge2Tests {
 
     public static final String ADMIN_USERNAME = "admin";
     public static final String ADMIN_PASSWORD = "password";
-    WebDriver driver;
+    public static final String BASE_URL = "https://automationintesting.online/";
+    protected WebDriver driver;
 
     @Before
     public void createBrowserInstance() {
@@ -45,8 +46,7 @@ public class Challenge2Tests {
     //  Test one: Check to see if you can log in with valid credentials
     @Test
     public void loginTest() {
-        driver.navigate().to("https://automationintesting.online/#/admin");
-
+        navigateToAdminPage();
         loginAsAdmin();
 
         AdminNavBar adminNavBar = new AdminNavBar(driver);
@@ -56,10 +56,10 @@ public class Challenge2Tests {
     }
 
     //  Test two: Check to see if rooms are saved and displayed in the UI
+
     @Test
     public void room() {
-        driver.navigate().to("https://automationintesting.online/#/admin");
-
+        navigateToAdminPage();
         loginAsAdmin();
 
         AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
@@ -67,15 +67,12 @@ public class Challenge2Tests {
 
         assertThat(addRoomPanel.getSavedRoomCount(), not(1));
     }
-
     //  Test three: Check to see the confirm message appears when branding is updated
+
     @Test
     public void updateBranding() {
-        driver.get("https://automationintesting.online/#/admin");
-
+        navigateToSubpage("#/admin/branding");
         loginAsAdmin();
-
-        driver.get("https://automationintesting.online/#/admin/branding");
 
         BrandingPanel brandingPanel = new BrandingPanel(driver);
         brandingPanel.setName("Test");
@@ -85,11 +82,11 @@ public class Challenge2Tests {
                 brandingPanel.isCloseModalButtonDisplayed(),
                 is(true));
     }
-
     //  Test four: Check to see if the contact form shows a success message
+
     @Test
     public void contactCheck() {
-        driver.navigate().to("https://automationintesting.online");
+        navigateToBaseURL();
 
         ContactPanel contactPanel = new ContactPanel(driver);
         contactPanel.enterContactDetails("TEST123", "TEST123@TEST.COM", "01212121311");
@@ -104,8 +101,7 @@ public class Challenge2Tests {
     //  Test five: Check to see if unread messages are bolded
     @Test
     public void isTheMessageBoldWhenUnreadInTheMessageView() {
-        driver.navigate().to("https://automationintesting.online/#/admin/messages");
-
+        navigateToSubpage("#/admin/messages");
         loginAsAdmin();
 
         MessagePanel messagePanel = new MessagePanel(driver);
@@ -115,5 +111,17 @@ public class Challenge2Tests {
     private void loginAsAdmin() {
         LoginPanel loginPanel = new LoginPanel(driver);
         loginPanel.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+    }
+
+    private void navigateToAdminPage() {
+        navigateToSubpage("#/admin");
+    }
+
+    private void navigateToBaseURL() {
+        driver.navigate().to(BASE_URL);
+    }
+
+    public void navigateToSubpage(String subpage) {
+        driver.navigate().to(BASE_URL + subpage);
     }
 }
