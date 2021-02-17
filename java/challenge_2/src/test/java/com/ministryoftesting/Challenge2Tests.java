@@ -51,8 +51,7 @@ public class Challenge2Tests {
 
         AdminNavBar adminNavBar = new AdminNavBar(driver);
 
-        System.out.println(adminNavBar.getNavigationLinkText().get(0));
-        assertThat(adminNavBar.getNavigationLinkText().get(0), is("Rooms"));
+        assertThat(adminNavBar.getFirstNavigationLinkDisplayed(), is("Rooms"));
     }
 
     //  Test two: Check to see if rooms are saved and displayed in the UI

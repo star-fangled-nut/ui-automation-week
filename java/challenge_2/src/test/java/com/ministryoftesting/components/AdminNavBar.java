@@ -22,4 +22,8 @@ public class AdminNavBar {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
     }
+
+    public String getFirstNavigationLinkDisplayed() {
+        return getNavigationLinkText().get(0);
+    }
 }
