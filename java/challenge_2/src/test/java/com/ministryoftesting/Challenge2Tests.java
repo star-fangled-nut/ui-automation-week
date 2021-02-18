@@ -13,14 +13,6 @@ import java.util.concurrent.TimeUnit;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-//    Welcome to UI Automation Challenge 2
-//
-//    For this challenge it's all about creating clean, readable and maintainable code. Below
-//    are five tests that work (just about) but require cleaning up. Update this class so that
-//    code base so that it's easier to maintain, more readable and has sensible ways of asserting
-//    data. You might want to research different approaches to improving UI automation such as
-//    Page Object Models and implicit vs. explicit waits
-
 public class Challenge2Tests {
 
     public static final String ADMIN_USERNAME = "admin";
@@ -40,7 +32,6 @@ public class Challenge2Tests {
         driver.quit();
     }
 
-    //  Test one: Check to see if you can log in with valid credentials
     @Test
     public void loginTest() {
         navigateToAdminPage();
@@ -50,8 +41,6 @@ public class Challenge2Tests {
 
         assertThat(adminNavBar.getFirstNavigationLinkDisplayed(), is("Rooms"));
     }
-
-    //  Test two: Check to see if rooms are saved and displayed in the UI
 
     @Test
     public void room() {
@@ -66,7 +55,6 @@ public class Challenge2Tests {
                 addRoomPanel.addRoomIncrementsRoomCount(),
                 is(true));
     }
-    //  Test three: Check to see the confirm message appears when branding is updated
 
     @Test
     public void updateBranding() {
@@ -81,7 +69,6 @@ public class Challenge2Tests {
                 brandingPanel.isCloseModalButtonDisplayed(),
                 is(true));
     }
-    //  Test four: Check to see if the contact form shows a success message
 
     @Test
     public void contactCheck() {
@@ -92,10 +79,12 @@ public class Challenge2Tests {
         contactPanel.enterMessageDetails("TEsTEST", "TEsTESTTEsTESTTEsTEST");
         contactPanel.submitMessage();
 
-        assertThat("Contact message submitted successfully", contactPanel.isMessageSubmittedSuccessfully(), is(true));
+        assertThat(
+                "Contact message submitted successfully",
+                contactPanel.isMessageSubmittedSuccessfully(),
+                is(true));
     }
 
-    //  Test five: Check to see if unread messages are bolded
     @Test
     public void isTheMessageBoldWhenUnreadInTheMessageView() {
         navigateToSubpage("#/admin/messages");
