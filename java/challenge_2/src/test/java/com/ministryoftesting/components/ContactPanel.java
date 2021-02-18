@@ -1,7 +1,12 @@
 package com.ministryoftesting.components;
 
+import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionTimeoutException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import java.time.Duration;
+import java.util.concurrent.Callable;
 
 public class ContactPanel {
 
@@ -37,7 +42,18 @@ public class ContactPanel {
         driver.findElement(submitMessageButton).click();
     }
 
-    public boolean messageIsSubmittedSuccessfully() {
-        return driver.findElement(contactPanel).getText().contains("Thanks for getting in touch");
+    public Callable<Boolean> messageIsSubmittedSuccessfully() {
+        return () -> driver.findElement(contactPanel).getText().contains("Thanks for getting in touch");
+    }
+
+    public boolean isMessageSubmittedSuccessfully() {
+        try {
+            Awaitility.await()
+                    .atMost(Duration.ofSeconds(10))
+                    .until(messageIsSubmittedSuccessfully());
+        } catch (ConditionTimeoutException e) {
+            throw new RuntimeException("Failed to submit contact message");
+        }
+        return true;
     }
 }

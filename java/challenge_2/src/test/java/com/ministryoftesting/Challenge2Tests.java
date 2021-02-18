@@ -2,19 +2,16 @@ package com.ministryoftesting;
 
 import com.ministryoftesting.components.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.awaitility.Awaitility;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 
 //    Welcome to UI Automation Challenge 2
 //
@@ -62,14 +59,12 @@ public class Challenge2Tests {
         loginAsAdmin();
 
         AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
-
-        int initialRoomCount = addRoomPanel.getSavedRoomCount();
         addRoomPanel.addRoom("101", "101");
 
         assertThat(
                 "The number of rooms displayed has incremented",
-                addRoomPanel.getSavedRoomCount(),
-                greaterThan(initialRoomCount));
+                addRoomPanel.addRoomIncrementsRoomCount(),
+                is(true));
     }
     //  Test three: Check to see the confirm message appears when branding is updated
 
@@ -97,9 +92,7 @@ public class Challenge2Tests {
         contactPanel.enterMessageDetails("TEsTEST", "TEsTESTTEsTESTTEsTEST");
         contactPanel.submitMessage();
 
-        Awaitility.await()
-                .atMost(Duration.ofSeconds(10))
-                .until(contactPanel::messageIsSubmittedSuccessfully);
+        assertThat("Contact message submitted successfully", contactPanel.isMessageSubmittedSuccessfully(), is(true));
     }
 
     //  Test five: Check to see if unread messages are bolded

@@ -26,7 +26,9 @@ public class AddRoomPanel {
     public void addRoom(String roomNumber, String price) {
         driver.findElement(roomNumberInputField).sendKeys(roomNumber);
         driver.findElement(roomPriceInputField).sendKeys(price);
+    }
 
+    public boolean addRoomIncrementsRoomCount() {
         int roomCount = getSavedRoomCount();
 
         driver.findElement(createRoomButton).click();
@@ -36,6 +38,8 @@ public class AddRoomPanel {
         } catch (ConditionTimeoutException exception) {
             throw new RuntimeException("Failed to save room details");
         }
+
+        return true;
     }
 
     private Callable<Boolean> getUpdatedRoomCount(int roomCount) {
