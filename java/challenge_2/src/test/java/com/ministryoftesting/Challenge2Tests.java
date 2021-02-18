@@ -1,165 +1,113 @@
 package com.ministryoftesting;
 
+import com.ministryoftesting.components.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
-
-//    Welcome to UI Automation Challenge 2
-//
-//    For this challenge it's all about creating clean, readable and maintainable code. Below
-//    are five tests that work (just about) but require cleaning up. Update this class so that
-//    code base so that it's easier to maintain, more readable and has sensible ways of asserting
-//    data. You might want to research different approaches to improving UI automation such as
-//    Page Object Models and implicit vs. explicit waits
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Challenge2Tests {
 
-//  Test one: Check to see if you can log in with valid credentials
-    @Test
-    public void loginTest() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
+    public static final String ADMIN_USERNAME = "admin";
+    public static final String ADMIN_PASSWORD = "password";
+    public static final String BASE_URL = "https://automationintesting.online/";
+    protected WebDriver driver;
 
-        driver.navigate().to("https://automationintesting.online/#/");
-        driver.findElement(By.cssSelector("footer p a:nth-child(5)")).click();
-    Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        Thread.sleep(1000);
-        driver.findElement(By.className("float-right")).click();
-
-
-        Thread.sleep(5000);
-
-    WebElement webElement = driver.findElement(By.className("navbar-collapse"));
-    System.out.println(webElement.getText());
-    Boolean title = webElement.getText().contains("Rooms");
-
-        assertThat(true, is(title));
-    }
-
-//  Test two: Check to see if rooms are saved and displayed in the UI
-    @Test
-    public void room() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-
-        driver.navigate().to("https://automationintesting.online/#/");
-        driver.findElement(By.xpath("//a[@href=\"/#/admin\"]")).click();
-
-        Thread.sleep(3600);
-
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        Thread.sleep(1000);
-        driver.findElement(By.className("float-right")).click();
-
-        Thread.sleep(2000);
-
-        driver.findElement(By.cssSelector(".room-form > div:nth-child(1) input")).sendKeys("101");
-        driver.findElement(By.cssSelector(".room-form > div:nth-child(4) input")).sendKeys("101");
-        Thread.sleep(1000);
-        driver.findElement(By.className("btn-outline-primary")).click();
-
-        Thread.sleep(5000);
-
-        assertThat(driver.findElements(By.className(".detail")).size(), not(1));
-    }
-
-//  Test three: Check to see the confirm message appears when branding is updated
-    @Test
-    public void updateBrandin() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-
-        driver.get("https://automationintesting.online/#/admin");
-
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        Thread.sleep(1000);
-        driver.findElement(By.className("float-right")).click();
-
-        driver.get("https://automationintesting.online/#/admin/branding");
-
-        Thread.sleep(5000);
-
-        driver.findElement(By.className("form-control")).sendKeys("Test");
-        driver.findElement(By.className("btn-outline-primary")).click();
-
-        Thread.sleep(1001);
-
-        int count = driver.findElements(By.xpath("//button[text()=\"Close\"]")).size();
-
-        if(count == 1){
-            assertThat(true, is(true));
-        } else {
-            assertThat(true, is(Boolean.FALSE));
-        }
-    }
-
-    WebDriver driver;
-
-//  Test four: Check to see if the contact form shows a success message
-    @Test
-    public void ContectCheck() throws InterruptedException {
+    @Before
+    public void createBrowserInstance() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-
-        driver.navigate().to("https://automationintesting.online");
-
-        driver.findElement(By.cssSelector("input[placeholder=\"Name\"]")).sendKeys("TEST123");
-        driver.findElement(By.cssSelector("input[placeholder=\"Email\"]")).sendKeys("TEST123@TEST.COM");
-        driver.findElement(By.cssSelector("input[placeholder=\"Phone\"]")).sendKeys("01212121311");
-        driver.findElement(By.cssSelector("input[placeholder=\"Subject\"]")).sendKeys("TEsTEST");
-        driver.findElement(By.cssSelector("textarea")).sendKeys("TEsTESTTEsTESTTEsTEST");
-        Thread.sleep(2000);
-        driver.findElement(By.xpath("//button[text()=\"Submit\"]")).click();
-
-
-        Thread.sleep(4000);
-        assertThat(driver.findElement(By.cssSelector(".contact")).getText().contains("Thanks for getting in touch"), is(true));
-}
-
-//  Test five: Check to see if unread messages are bolded
-    @Test
-    public void isTheMessageBoldWhenUnreadInTheMEssageViwe() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-
-        driver.navigate().to("https://automationintesting.online/#/admin/messages");
-
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][1]/input")).sendKeys("admin");
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@class=\"form-group\"][2]/input")).sendKeys("password");
-        Thread.sleep(1000);
-        driver.findElement(By.className("float-right")).click();
-
-        Thread.sleep(3000);
-
-
-
-
-
-        assertThat(checkCount(driver.findElements(By.cssSelector(".read-false"))), is(true));
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    private Boolean checkCount(List<WebElement> elements) {
-        if(elements.size() >= 1){
-            return true;
-        }
+    @After
+    public void closeBrowser() {
+        driver.quit();
+    }
 
-        return false;
+    @Test
+    public void loginTest() {
+        navigateToAdminPage();
+        loginAsAdmin();
+
+        AdminNavBar adminNavBar = new AdminNavBar(driver);
+
+        assertThat(adminNavBar.getFirstNavigationLinkDisplayed(), is("Rooms"));
+    }
+
+    @Test
+    public void room() {
+        navigateToAdminPage();
+        loginAsAdmin();
+
+        AddRoomPanel addRoomPanel = new AddRoomPanel(driver);
+        addRoomPanel.addRoom("101", "101");
+
+        assertThat(
+                "The number of rooms displayed has incremented",
+                addRoomPanel.addRoomIncrementsRoomCount(),
+                is(true));
+    }
+
+    @Test
+    public void updateBranding() {
+        navigateToSubpage("#/admin/branding");
+        loginAsAdmin();
+
+        BrandingPanel brandingPanel = new BrandingPanel(driver);
+        brandingPanel.setName("Test");
+
+        assertThat(
+                "Branding updated modal is displayed",
+                brandingPanel.isCloseModalButtonDisplayed(),
+                is(true));
+    }
+
+    @Test
+    public void contactCheck() {
+        navigateToBaseURL();
+
+        ContactPanel contactPanel = new ContactPanel(driver);
+        contactPanel.enterContactDetails("TEST123", "TEST123@TEST.COM", "01212121311");
+        contactPanel.enterMessageDetails("TEsTEST", "TEsTESTTEsTESTTEsTEST");
+        contactPanel.submitMessage();
+
+        assertThat(
+                "Contact message submitted successfully",
+                contactPanel.isMessageSubmittedSuccessfully(),
+                is(true));
+    }
+
+    @Test
+    public void isTheMessageBoldWhenUnreadInTheMessageView() {
+        navigateToSubpage("#/admin/messages");
+        loginAsAdmin();
+
+        MessagePanel messagePanel = new MessagePanel(driver);
+        assertThat("Unread messages are displayed", messagePanel.unreadMessagesExist(), is(true));
+    }
+
+    private void loginAsAdmin() {
+        LoginPanel loginPanel = new LoginPanel(driver);
+        loginPanel.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+    }
+
+    private void navigateToAdminPage() {
+        navigateToSubpage("#/admin");
+    }
+
+    private void navigateToBaseURL() {
+        driver.navigate().to(BASE_URL);
+    }
+
+    public void navigateToSubpage(String subpage) {
+        driver.navigate().to(BASE_URL + subpage);
     }
 }
