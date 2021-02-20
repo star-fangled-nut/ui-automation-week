@@ -26,6 +26,7 @@ public class Challenge2Tests {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
+        options.addArguments("--window-size=1920,1080");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
