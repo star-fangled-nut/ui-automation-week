@@ -16,7 +16,7 @@ public class BrandingPanel {
 
     private final By submitButton = By.id("updateBranding");
 
-    private final By closeModalButton = By.xpath("//button[text()=\"Close\"]");
+    private final By brandingUpdatedModal = By.className("ReactModal__Content");
 
     public void setName(String name) {
         driver.findElement(nameField).sendKeys(name);
@@ -27,7 +27,7 @@ public class BrandingPanel {
         this.driver = driver;
     }
 
-    public boolean isCloseModalButtonDisplayed() {
+    public boolean isBrandingUpdatedModalDisplayed() {
         try {
             Awaitility.await()
                     .atMost(Duration.ofSeconds(10))
@@ -38,7 +38,7 @@ public class BrandingPanel {
         return true;
     }
 
-    public Callable<Boolean> closeModalButtonIsDisplayed() {
-        return () -> driver.findElement(closeModalButton).isDisplayed();
+    private Callable<Boolean> closeModalButtonIsDisplayed() {
+        return () -> driver.findElement(brandingUpdatedModal).isDisplayed();
     }
 }

@@ -71,7 +71,7 @@ public class Challenge2Tests {
 
         assertThat(
                 "Branding updated modal is displayed",
-                brandingPanel.isCloseModalButtonDisplayed(),
+                brandingPanel.isBrandingUpdatedModalDisplayed(),
                 is(true));
     }
 
