@@ -1,8 +1,12 @@
 package com.ministryoftesting.components;
 
+import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionTimeoutException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+
+import java.time.Duration;
+import java.util.concurrent.Callable;
 
 public class BrandingPanel {
 
@@ -25,9 +29,16 @@ public class BrandingPanel {
 
     public boolean isCloseModalButtonDisplayed() {
         try {
-            return driver.findElement(closeModalButton).isDisplayed();
-        } catch (NoSuchElementException exception) {
+            Awaitility.await()
+                    .atMost(Duration.ofSeconds(10))
+                    .until(closeModalButtonIsDisplayed());
+        } catch (ConditionTimeoutException exception) {
             return false;
         }
+        return true;
+    }
+
+    public Callable<Boolean> closeModalButtonIsDisplayed() {
+        return () -> driver.findElement(closeModalButton).isDisplayed();
     }
 }
