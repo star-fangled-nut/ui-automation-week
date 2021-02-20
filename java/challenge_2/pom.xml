@@ -19,6 +19,10 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -46,5 +50,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
