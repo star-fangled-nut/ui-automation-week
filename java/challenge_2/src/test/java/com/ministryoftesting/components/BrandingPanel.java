@@ -39,6 +39,6 @@ public class BrandingPanel {
     }
 
     private Callable<Boolean> closeModalButtonIsDisplayed() {
-        return () -> driver.findElement(brandingUpdatedModal).isDisplayed();
+        return () -> driver.findElement(By.tagName("body")).getText().contains("Branding updated!");
     }
 }

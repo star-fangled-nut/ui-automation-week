@@ -28,7 +28,7 @@ public class Challenge2Tests {
         options.addArguments("--no-sandbox");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--headless");
+//        options.addArguments("--headless");
         options.addArguments("--enable-javascript");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
