@@ -16,7 +16,7 @@ public class BrandingPanel {
 
     private final By submitButton = By.id("updateBranding");
 
-    private final By brandingUpdatedModal = By.className("ReactModal__Body--open");
+    private final By brandingUpdatedModal = By.xpath("//button[text()=\"Close\"]");
 
     public void setName(String name) {
         driver.findElement(nameField).sendKeys(name);
